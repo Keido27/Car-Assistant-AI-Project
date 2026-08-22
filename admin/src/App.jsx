@@ -7,6 +7,8 @@ import Inventory from './pages/Inventory';
 import CarForm from './pages/CarForm';
 import Leads from './pages/Leads';
 import LeadDetail from './pages/LeadDetail';
+import LeadForm from './pages/LeadForm';
+
 
 export default function App() {
   const [user, setUser] = useState(undefined); // undefined = checking, null = signed out
@@ -28,6 +30,7 @@ export default function App() {
           <Route path="/inventory/new" element={<CarForm />} />
           <Route path="/inventory/:id" element={<CarForm />} />
           <Route path="/leads" element={<Leads />} />
+          <Route path="/leads/new" element={<LeadForm />} />
           <Route path="/leads/:id" element={<LeadDetail />} />
           <Route path="/" element={<Navigate to="/inventory" />} />
         </Route>

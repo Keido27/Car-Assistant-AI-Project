@@ -14,6 +14,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('cars/{car}/photos', [CarController::class, 'uploadPhoto']);
     Route::delete('cars/{car}/photos/{photo}', [CarController::class, 'deletePhoto']);
 
-    Route::apiResource('leads', LeadController::class)->only(['index', 'show', 'update']);
+    Route::apiResource('leads', LeadController::class)->only(['index', 'show','store', 'update']);
     Route::post('leads/{lead}/conversations', [ConversationController::class, 'store']);
 });

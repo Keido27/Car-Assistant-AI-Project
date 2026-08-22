@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LeadStoreRequest;
 use App\Http\Requests\LeadUpdateRequest;
 use App\Http\Resources\LeadResource;
 use App\Models\Lead;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class LeadController extends Controller
 {
@@ -30,6 +32,33 @@ class LeadController extends Controller
             ->paginate($request->integer('per_page', 20));
 
         return LeadResource::collection($leads);
+    }
+
+    /**
+     * POST /api/leads — staff manually adding a lead that never came through
+     * WhatsApp (walk-in, phone call, referral). Distinct from how the bot
+     * will create leads later (via create_lead, source='whatsapp').
+     */
+    public function store(LeadStoreRequest $request)
+    {
+        $lead = Lead::create([
+            ...$request->validated(),
+            'source' => 'manual',
+            'status' => 'human_handling', // a staff member is the one talking to them
+            'assigned_to' => $request->user()->id,
+            'last_message_at' => now(),
+        ]);
+
+        // Seed the thread with a system-style note so the conversation log
+        // makes sense later, rather than opening on an empty history.
+        $lead->conversations()->create([
+            'sender' => 'human',
+            'user_id' => $request->user()->id,
+            'message' => "Lead added manually by {$request->user()->name}.",
+            'sent_at' => now(),
+        ]);
+
+        return new LeadResource($lead->load(['car', 'assignee']));
     }
 
     public function show(Lead $lead)

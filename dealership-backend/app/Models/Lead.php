@@ -20,6 +20,7 @@ class Lead extends Model
         'status',
         'assigned_to',
         'last_message_at',
+        'source'
     ];
 
     protected $casts = [

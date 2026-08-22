@@ -20,9 +20,17 @@ export default function Leads() {
 
   return (
     <div className="p-8">
-      <div className="mb-6">
-        <h1 className="text-xl font-semibold text-bay-900">Leads</h1>
-        <p className="text-sm text-bay-600">Conversations needing a human float to the top.</p>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-semibold text-bay-900">Leads</h1>
+          <p className="text-sm text-bay-600">Conversations needing a human float to the top.</p>
+        </div>
+        <Link
+          to="/leads/new"
+          className="rounded-md bg-signal px-4 py-2 text-sm font-semibold text-white hover:bg-signal-dim"
+        >
+          + Add lead
+        </Link>
       </div>
 
       <div className="mb-4">
@@ -62,7 +70,12 @@ export default function Leads() {
                   <Link to={`/leads/${lead.id}`} className="font-medium text-bay-900 hover:text-signal">
                     {lead.name || lead.phone}
                   </Link>
-                  <div className="font-mono text-xs text-bay-400">{lead.phone}</div>
+                  <div className="font-mono text-xs text-bay-400">
+                    {lead.phone}
+                    {lead.source === 'manual' && (
+                      <span className="ml-2 rounded bg-bay-100 px-1.5 py-0.5 text-bay-500">manual</span>
+                    )}
+                  </div>
                 </td>
                 <td className="px-4 py-3 text-bay-700">
                   {lead.car ? `${lead.car.brand} ${lead.car.model} ${lead.car.year}` : '—'}
