@@ -1,0 +1,33 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class Conversation extends Model
+{
+    protected $fillable = [
+        'lead_id',
+        'sender',
+        'user_id',
+        'message',
+        'meta',
+        'sent_at',
+    ];
+
+    protected $casts = [
+        'meta' => 'array',
+        'sent_at' => 'datetime',
+    ];
+
+    public function lead(): BelongsTo
+    {
+        return $this->belongsTo(Lead::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+}
