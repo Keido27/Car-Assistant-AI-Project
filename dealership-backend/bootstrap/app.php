@@ -19,6 +19,8 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
+            'whatsapp.signature' => \App\Http\Middleware\VerifyWhatsAppSignature::class,
+
         ]);
 
         $middleware->statefulApi();

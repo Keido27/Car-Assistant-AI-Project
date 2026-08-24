@@ -12,6 +12,7 @@ class Conversation extends Model
         'sender',
         'user_id',
         'message',
+        'wa_message_id',
         'meta',
         'sent_at',
     ];
