@@ -12,7 +12,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(\App\Services\Gemini\GeminiClient::class, function () {
+            return new \App\Services\Gemini\GeminiClient(
+                apiKey: config('services.gemini.api_key'),
+                model: config('services.gemini.model'),
+                baseUrl: config('services.gemini.base_url'),
+            );
+        });
     }
 
     /**
