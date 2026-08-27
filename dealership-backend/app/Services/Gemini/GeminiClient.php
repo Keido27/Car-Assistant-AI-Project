@@ -33,4 +33,25 @@ class GeminiClient
 
         return data_get($response->json(), 'candidates.0.content.parts.0.text', '');
     }
+
+    public function generateContent(array $contents, array $tools = [], ?string $systemInstruction = null): array
+    {
+        $payload = ['contents' => $contents];
+
+        if ($tools !== []) {
+            $payload['tools'] = [['functionDeclarations' => $tools]];
+        }
+
+        if ($systemInstruction !== null) {
+            $payload['systemInstruction'] = ['parts' => [['text' => $systemInstruction]]];
+        }
+
+        $response = Http::withHeaders([
+            'x-goog-api-key' => $this->apiKey,
+        ])->post("{$this->baseUrl}/models/{$this->model}:generateContent", $payload);
+
+        $response->throw();
+
+        return $response->json();
+    }
 }

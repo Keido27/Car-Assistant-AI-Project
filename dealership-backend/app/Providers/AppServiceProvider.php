@@ -19,6 +19,11 @@ class AppServiceProvider extends ServiceProvider
                 baseUrl: config('services.gemini.base_url'),
             );
         });
+        $this->app->singleton(\App\Services\Gemini\ToolCallingConversation::class, function ($app) {
+            return (new \App\Services\Gemini\ToolCallingConversation(
+                $app->make(\App\Services\Gemini\GeminiClient::class)
+            ))->registerTool($app->make(\App\Services\Gemini\Tools\SearchInventoryTool::class));
+        });
     }
 
     /**
