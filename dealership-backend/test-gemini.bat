@@ -17,5 +17,4 @@ echo ========== %~1 ==========
 echo USER: %~2
 php artisan gemini:test-tools "%~2"
 echo ============================
-pause
 exit /b
