@@ -47,4 +47,4 @@ Thumbs.db
 .php-cs-fixer.php.cache
 
 # Logs
-*.log
+*.logmatrix.log
