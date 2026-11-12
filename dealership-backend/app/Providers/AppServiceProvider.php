@@ -12,6 +12,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->scoped(\App\Services\Gemini\ConversationContext::class);
+
         $this->app->singleton(\App\Services\Gemini\GeminiClient::class, function () {
             return new \App\Services\Gemini\GeminiClient(
                 apiKey: config('services.gemini.api_key'),
@@ -19,10 +21,14 @@ class AppServiceProvider extends ServiceProvider
                 baseUrl: config('services.gemini.base_url'),
             );
         });
-        $this->app->singleton(\App\Services\Gemini\ToolCallingConversation::class, function ($app) {
+
+        $this->app->scoped(\App\Services\Gemini\ToolCallingConversation::class, function ($app) {
             return (new \App\Services\Gemini\ToolCallingConversation(
                 $app->make(\App\Services\Gemini\GeminiClient::class)
-            ))->registerTool($app->make(\App\Services\Gemini\Tools\SearchInventoryTool::class));
+            ))
+                ->registerTool($app->make(\App\Services\Gemini\Tools\SearchInventoryTool::class))
+                ->registerTool($app->make(\App\Services\Gemini\Tools\GetCarDetailsTool::class))
+                ->registerTool($app->make(\App\Services\Gemini\Tools\HandoffToSalesTool::class));
         });
     }
 

@@ -11,10 +11,11 @@ use App\Models\Car;
  * status=ready (scopeMatching's own default), since a customer should
  * only ever hear about cars that are actually sellable right now.
  *
- * Deliberately returns a lean, hand-picked field set rather than
- * CarResource — photos/URLs add tokens without helping the model answer,
- * and every field returned here comes straight from the DB row, so there's
- * no room for the bot to embellish beyond what's actually on file.
+ * Deliberately returns a lean, hand-picked field set (CarPayload::summary,
+ * shared with get_car_details) rather than CarResource — photos/URLs add
+ * tokens without helping the model answer, and every field returned here
+ * comes straight from the DB row, so there's no room for the bot to
+ * embellish beyond what's actually on file.
  */
 class SearchInventoryTool implements GeminiTool
 {
@@ -78,19 +79,7 @@ class SearchInventoryTool implements GeminiTool
 
         return [
             'count' => $cars->count(),
-            'cars' => $cars->map(fn (Car $car) => [
-                'stock_number' => $car->stock_number,
-                'brand' => $car->brand,
-                'model' => $car->model,
-                'variant' => $car->variant,
-                'year' => $car->year,
-                'price_idr' => $car->price,
-                'mileage_km' => $car->mileage,
-                'transmission' => $car->transmission,
-                'fuel_type' => $car->fuel_type,
-                'color' => $car->color,
-                'condition_notes' => $car->condition_notes,
-            ])->all(),
+            'cars' => $cars->map(fn (Car $car) => CarPayload::summary($car))->all(),
         ];
     }
 }

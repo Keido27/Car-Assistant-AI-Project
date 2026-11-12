@@ -25,6 +25,7 @@ class LeadResource extends JsonResource
             'last_message_at' => $this->last_message_at,
             'conversations' => ConversationResource::collection($this->whenLoaded('conversations')),
             'created_at' => $this->created_at,
+            'handoff_reason' => $this->handoff_reason,
         ];
     }
 }

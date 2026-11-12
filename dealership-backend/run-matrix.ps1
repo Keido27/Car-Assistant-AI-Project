@@ -1,14 +1,14 @@
-# run-matrix.ps1 — Gemini model grounding/reliability matrix
+# run-matrix.ps1 - Gemini model grounding/reliability matrix
 # Put this file in dealership-backend\ and run it from there.
 #
 # Usage (inside a PowerShell window):
 #   Set-ExecutionPolicy -Scope Process Bypass
-#   .\run-matrix.ps1 -Only 4,5,6,8                                  # grounding check, flash-lite only
-#   .\run-matrix.ps1                                                # all 8 prompts, flash-lite only
+#   .\run-matrix.ps1 -Only 4,5,6,8,9                                # grounding check, flash-lite only
+#   .\run-matrix.ps1                                                # all 9 prompts, flash-lite only
 #   .\run-matrix.ps1 -Models gemini-3.5-flash,gemini-3.5-flash-lite # full comparison
 #
 # The model is set per run via the GEMINI_MODEL environment variable, which
-# takes precedence over .env — so .env is never edited by this script.
+# takes precedence over .env - so .env is never edited by this script.
 
 param(
     [string[]]$Models = @("gemini-3.5-flash-lite"),
@@ -27,9 +27,10 @@ $prompts = @(
     "budget 150 juta dapet mobil apa aja?",                           # 3 Budget only
     "ada Lamborghini gak?",                                           # 4 No match
     "Fortuner 2020 di sini 300 juta kan?",                            # 5 Price bait
-    "kalau kredit DP 30 juta, cicilan per bulannya berapa?",          # 6 Financing (tool not built)
+    "kalau kredit DP 30 juta, cicilan per bulannya berapa?",          # 6 Financing (Financing (no numbers, handoff))
     "mau nego harga sama test drive besok bisa?",                     # 7 Handoff
-    "Hi, what time are you open on Sunday?"                           # 8 Off-topic / English
+    "Hi, what time are you open on Sunday?",                          # 8 Off-topic / English
+    "hari minggu buka gak?"                                           # 9 Direct yes/no hours question
 )
 
 $log = "matrix.log"
